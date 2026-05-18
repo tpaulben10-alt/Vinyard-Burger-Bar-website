@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vinyard Burger Bar | Register</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <main class="auth-screen">
+    <section class="hero-panel">
+      <div class="hero-text">
+        <p class="eyebrow">Join the table</p>
+        <h1>Vinyard Burger Bar</h1>
+        <p>Your next order starts here.</p>
+      </div>
+    </section>
+    <section class="auth-panel-wrap">
+      <form class="auth-card panel" id="registerForm">
+        <a class="wordmark" href="/index.html">
+          <span class="wordmark-mark">V</span>
+          <span>Vinyard Burger Bar</span>
+        </a>
+        <div>
+          <p class="eyebrow">Create account</p>
+          <h2>Register</h2>
+        </div>
+        <label>Full Name
+          <input name="name" type="text" placeholder="Avery Cruz" autocomplete="name" required>
+        </label>
+        <label>Email
+          <input name="email" type="email" placeholder="avery@example.com" autocomplete="email" required>
+        </label>
+        <label>Password
+          <input name="password" type="password" placeholder="Create a strong password" autocomplete="new-password" minlength="8" required>
+        </label>
+        <label>Confirm Password
+          <input name="confirmPassword" type="password" placeholder="Repeat password" autocomplete="new-password" minlength="8" required>
+        </label>
+        <button class="primary-btn" type="submit">Create Account</button>
+        <p class="message" id="registerMessage"></p>
+        <p class="form-link">Already have an account? <a href="/index.html">Login</a></p>
+      </form>
+    </section>
+  </main>
+  <script src="/js/auth.js"></script>
+  <script>
+    const form = document.querySelector("#registerForm");
+    const message = document.querySelector("#registerMessage");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const body = Object.fromEntries(new FormData(form));
+      if (body.password !== body.confirmPassword) {
+        VBB.showMessage(message, "Passwords do not match.", true);
+        return;
+      }
+      try {
+        await VBB.api("/api/auth/register", {
+          method: "POST",
+          body: JSON.stringify({ name: body.name, email: body.email, password: body.password })
+        });
+        location.href = "/index.html?registered=1";
+      } catch (error) {
+        VBB.showMessage(message, error.message, true);
+      }
+    });
+  </script>
+</body>
+</html>

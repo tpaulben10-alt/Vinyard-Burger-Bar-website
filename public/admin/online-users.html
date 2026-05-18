@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vinyard Burger Bar | Online Customers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body data-admin-page="online">
+  <header class="topbar">
+    <a class="wordmark" href="/admin/dashboard.html"><span class="wordmark-mark">V</span><span>Vinyard Burger Bar POS</span></a>
+    <nav class="nav-actions"><span><span data-user-name></span></span><button class="link-button" type="button" data-logout>Logout</button></nav>
+  </header>
+  <div class="admin-shell">
+    <aside class="admin-sidebar"><nav class="admin-nav" id="adminNav"></nav></aside>
+    <main class="admin-main">
+      <div class="page-head"><p class="eyebrow">Live sessions</p><h2>Online Customers</h2></div>
+      <input id="onlineSearch" type="search" placeholder="Search by name or email">
+      <div class="online-list" id="onlineList"></div>
+    </main>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/socket.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

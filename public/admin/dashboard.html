@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vinyard Burger Bar | Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body data-admin-page="dashboard">
+  <header class="topbar">
+    <a class="wordmark" href="/admin/dashboard.html"><span class="wordmark-mark">V</span><span>Vinyard Burger Bar POS</span></a>
+    <nav class="nav-actions"><span><span data-user-name></span></span><button class="link-button" type="button" data-logout>Logout</button></nav>
+  </header>
+  <div class="admin-shell">
+    <aside class="admin-sidebar"><nav class="admin-nav" id="adminNav"></nav></aside>
+    <main class="admin-main">
+      <div class="page-head">
+        <p class="eyebrow">POS overview</p>
+        <h2>Dashboard</h2>
+      </div>
+      <section class="stats-grid">
+        <article class="stat-card card"><span>Total Orders Today</span><strong id="totalOrdersToday">0</strong></article>
+        <article class="stat-card card"><span>Pending Orders</span><strong id="pendingOrders">0</strong></article>
+        <article class="stat-card card"><span>Online Customers</span><strong id="onlineCustomers">0</strong></article>
+        <article class="stat-card card"><span>Registered Users</span><strong id="registeredUsers">0</strong></article>
+      </section>
+      <section class="quick-grid">
+        <a class="card" href="/admin/orders.html"><h3>Manage Orders</h3><p class="muted">Update kitchen status and handoff flow.</p></a>
+        <a class="card" href="/admin/accounts.html"><h3>Accounts</h3><p class="muted">Browse registered customers and admins.</p></a>
+        <a class="card" href="/admin/online-users.html"><h3>Online Customers</h3><p class="muted">Watch live customer sessions.</p></a>
+      </section>
+      <div class="page-head"><p class="eyebrow">Recent activity</p><h2>Recent Orders</h2></div>
+      <section class="panel table-panel">
+        <table>
+          <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th></th></tr></thead>
+          <tbody id="recentOrders"></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/socket.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

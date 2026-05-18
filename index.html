@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vinyard Burger Bar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-switcher">
+      <a class="wordmark" href="#login" data-route="login">
+        <span class="wordmark-mark">V</span>
+        <span>Vinyard Burger Bar</span>
+      </a>
+      <nav aria-label="Prototype screens">
+        <a href="#login" data-route="login">Login</a>
+        <a href="#register" data-route="register">Register</a>
+        <a href="#menu" data-route="menu">Menu</a>
+        <a href="#tracking" data-route="tracking">Orders</a>
+        <a href="#admin-dashboard" data-route="admin-dashboard">Admin</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="screen auth-screen login-screen is-active" id="login" data-screen="login">
+        <div class="hero-panel">
+          <div class="hero-text">
+            <p class="eyebrow">Premium ordering system</p>
+            <h1>Vinyard Burger Bar</h1>
+            <p>Order Fresh. Eat Bold.</p>
+          </div>
+        </div>
+        <div class="auth-panel-wrap">
+          <form class="auth-card">
+            <p class="eyebrow">Welcome back</p>
+            <h2>Login</h2>
+            <label>
+              Email
+              <input type="email" placeholder="you@example.com" autocomplete="email">
+            </label>
+            <label>
+              Password
+              <input type="password" placeholder="••••••••" autocomplete="current-password">
+            </label>
+            <button class="primary-btn" type="button">Login</button>
+            <p class="form-link">New here? <a href="#register" data-route="register">Create an Account</a></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="screen register-screen" id="register" data-screen="register">
+        <form class="auth-card register-card">
+          <div class="burger-emblem" aria-hidden="true">
+            <span></span>
+          </div>
+          <p class="eyebrow">Join the table</p>
+          <h2>Create Account</h2>
+          <label>
+            Full Name
+            <input type="text" placeholder="Avery Cruz" autocomplete="name">
+          </label>
+          <label>
+            Email Address
+            <input type="email" placeholder="avery@example.com" autocomplete="email">
+          </label>
+          <label>
+            Password
+            <input type="password" id="passwordInput" placeholder="Create a strong password" autocomplete="new-password">
+          </label>
+          <div class="strength">
+            <span class="strength-fill"></span>
+          </div>
+          <label>
+            Confirm Password
+            <input type="password" placeholder="Repeat password" autocomplete="new-password">
+          </label>
+          <button class="primary-btn" type="button">Create Account</button>
+          <p class="form-link">Already have an account? <a href="#login" data-route="login">Login</a></p>
+        </form>
+      </section>
+
+      <section class="screen customer-screen" id="menu" data-screen="menu">
+        <nav class="customer-nav">
+          <a class="wordmark" href="#menu" data-route="menu">
+            <span class="wordmark-mark">V</span>
+            <span>Vinyard Burger Bar</span>
+          </a>
+          <div class="customer-actions">
+            <span>Hi, Avery</span>
+            <button class="icon-btn cart-trigger" type="button" aria-label="Open cart">
+              <span class="cart-icon"></span>
+              <span class="badge" id="cartCount">0</span>
+            </button>
+            <a href="#login" data-route="login">Logout</a>
+          </div>
+        </nav>
+        <div class="page-head">
+          <p class="eyebrow">Today's menu</p>
+          <h2>Craft burgers, sides, and bold pairings</h2>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Menu categories">
+          <button class="tab is-active" type="button" data-category="Burgers">Burgers</button>
+          <button class="tab" type="button" data-category="Sides">Sides</button>
+          <button class="tab" type="button" data-category="Drinks">Drinks</button>
+          <button class="tab" type="button" data-category="Combos">Combos</button>
+        </div>
+        <div class="menu-grid" id="menuGrid"></div>
+        <aside class="cart-sidebar" id="cartSidebar" aria-label="Shopping cart">
+          <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="close-btn" type="button" aria-label="Close cart">×</button>
+          </div>
+          <div id="cartItems" class="cart-items"></div>
+          <div class="cart-total">
+            <span>Subtotal</span>
+            <strong id="cartSubtotal">$0.00</strong>
+          </div>
+          <button class="primary-btn" type="button">Place Order</button>
+        </aside>
+        <div class="scrim" id="scrim"></div>
+      </section>
+
+      <section class="screen customer-screen" id="tracking" data-screen="tracking">
+        <nav class="customer-nav">
+          <a class="wordmark" href="#menu" data-route="menu">
+            <span class="wordmark-mark">V</span>
+            <span>Vinyard Burger Bar</span>
+          </a>
+          <div class="customer-actions">
+            <a href="#menu" data-route="menu">Menu</a>
+            <span>Hi, Avery</span>
+            <a href="#login" data-route="login">Logout</a>
+          </div>
+        </nav>
+        <div class="page-head compact">
+          <p class="eyebrow">Order tracking</p>
+          <h2>Follow every order from grill to handoff</h2>
+        </div>
+        <div class="orders-list">
+          <article class="order-card">
+            <div class="order-top">
+              <div>
+                <h3>#VBB-1048</h3>
+                <p>Vinyard Signature, Truffle Fries, Ginger Lime Fizz</p>
+              </div>
+              <span class="status preparing">Preparing</span>
+            </div>
+            <div class="stepper" data-step="2"></div>
+            <dl class="order-meta">
+              <div><dt>Total</dt><dd>$28.50</dd></div>
+              <div><dt>Placed</dt><dd>Today, 6:42 PM</dd></div>
+            </dl>
+          </article>
+          <article class="order-card">
+            <div class="order-top">
+              <div>
+                <h3>#VBB-1039</h3>
+                <p>Smokehouse Double Combo</p>
+              </div>
+              <span class="status delivered">✓ Delivered</span>
+            </div>
+            <div class="stepper" data-step="4"></div>
+            <dl class="order-meta">
+              <div><dt>Total</dt><dd>$21.75</dd></div>
+              <div><dt>Placed</dt><dd>May 17, 2026, 7:15 PM</dd></div>
+            </dl>
+            <button class="secondary-btn" type="button">Reorder</button>
+          </article>
+          <article class="order-card">
+            <div class="order-top">
+              <div>
+                <h3>#VBB-1027</h3>
+                <p>Classic Vineyard Burger, House Chips</p>
+              </div>
+              <span class="status cancelled">Cancelled</span>
+            </div>
+            <dl class="order-meta">
+              <div><dt>Total</dt><dd>$16.25</dd></div>
+              <div><dt>Placed</dt><dd>May 16, 2026, 1:08 PM</dd></div>
+            </dl>
+          </article>
+        </div>
+      </section>
+
+      <section class="screen admin-layout" id="admin-dashboard" data-screen="admin-dashboard">
+        <aside class="admin-sidebar"></aside>
+        <div class="admin-main">
+          <div class="admin-toast">New order received: #VBB-1052</div>
+          <div class="page-head compact">
+            <p class="eyebrow">POS overview</p>
+            <h2>Dashboard</h2>
+          </div>
+          <div class="stats-grid">
+            <article class="stat-card"><span>Total Orders Today</span><strong>86</strong></article>
+            <article class="stat-card"><span>Pending Orders</span><strong>12</strong></article>
+            <article class="stat-card live"><span><i></i> Customers Online Now</span><strong>18</strong></article>
+            <article class="stat-card"><span>Total Registered Accounts</span><strong>1,284</strong></article>
+          </div>
+          <section class="table-panel">
+            <div class="panel-head"><h3>Recent Orders</h3></div>
+            <table>
+              <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>#VBB-1052</td><td>Nina Park</td><td>2 items</td><td>$31.00</td><td><span class="status pending">Pending</span></td><td><button class="mini-btn">Manage</button></td></tr>
+                <tr><td>#VBB-1051</td><td>Marco Lee</td><td>4 items</td><td>$54.25</td><td><span class="status confirmed">Confirmed</span></td><td><button class="mini-btn">Manage</button></td></tr>
+                <tr><td>#VBB-1050</td><td>Avery Cruz</td><td>3 items</td><td>$28.50</td><td><span class="status preparing">Preparing</span></td><td><button class="mini-btn">Manage</button></td></tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+      </section>
+
+      <section class="screen admin-layout" id="admin-orders" data-screen="admin-orders">
+        <aside class="admin-sidebar"></aside>
+        <div class="admin-main">
+          <div class="page-head compact">
+            <p class="eyebrow">POS management</p>
+            <h2>Orders</h2>
+          </div>
+          <div class="filter-bar">
+            <button class="filter is-active" type="button">All</button>
+            <button class="filter" type="button">Pending</button>
+            <button class="filter" type="button">Confirmed</button>
+            <button class="filter" type="button">Preparing</button>
+            <button class="filter" type="button">Ready</button>
+            <button class="filter" type="button">Delivered</button>
+            <button class="filter" type="button">Cancelled</button>
+          </div>
+          <section class="table-panel">
+            <table id="ordersTable">
+              <thead><tr><th>Order ID</th><th>Customer</th><th>Items Ordered</th><th>Total</th><th>Time</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr data-order="#VBB-1052"><td>#VBB-1052</td><td>Nina Park</td><td>Signature Burger, Fries</td><td>$31.00</td><td>7:04 PM</td><td><span class="status pending">Pending</span><select><option>Pending</option><option>Confirmed</option><option>Preparing</option><option>Ready</option><option>Delivered</option><option>Cancelled</option></select></td></tr>
+                <tr data-order="#VBB-1051"><td>#VBB-1051</td><td>Marco Lee</td><td>2 Combos, 2 Drinks</td><td>$54.25</td><td>6:58 PM</td><td><span class="status confirmed">Confirmed</span><select><option>Confirmed</option><option>Preparing</option><option>Ready</option><option>Delivered</option><option>Cancelled</option></select></td></tr>
+                <tr data-order="#VBB-1050"><td>#VBB-1050</td><td>Avery Cruz</td><td>Truffle Burger, Fizz</td><td>$28.50</td><td>6:42 PM</td><td><span class="status preparing">Preparing</span><select><option>Preparing</option><option>Ready</option><option>Delivered</option><option>Cancelled</option></select></td></tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+        <aside class="details-panel" id="detailsPanel">
+          <button class="close-details" type="button">×</button>
+          <p class="eyebrow">Order details</p>
+          <h3 id="detailTitle">#VBB-1052</h3>
+          <p class="muted">Customer: Nina Park · nina@example.com</p>
+          <ul>
+            <li>Vinyard Signature Burger × 1</li>
+            <li>Truffle Fries × 1</li>
+            <li>Amber Iced Tea × 2</li>
+          </ul>
+          <strong>Total: $31.00</strong>
+        </aside>
+      </section>
+
+      <section class="screen admin-layout" id="admin-online" data-screen="admin-online">
+        <aside class="admin-sidebar"></aside>
+        <div class="admin-main">
+          <div class="page-head compact">
+            <p class="eyebrow">Live sessions</p>
+            <h2>Online Customers</h2>
+          </div>
+          <input class="search-input" id="onlineSearch" type="search" placeholder="Search by name or email">
+          <div class="online-list" id="onlineList">
+            <article data-search="avery cruz avery@example.com"><h3><i></i>Avery Cruz</h3><p>avery@example.com</p><span>Last active: now</span></article>
+            <article data-search="nina park nina@example.com"><h3><i></i>Nina Park</h3><p>nina@example.com</p><span>Last active: 1 min ago</span></article>
+            <article data-search="marco lee marco@example.com"><h3><i></i>Marco Lee</h3><p>marco@example.com</p><span>Last active: 3 min ago</span></article>
+          </div>
+          <p class="empty-state" id="onlineEmpty">No customers are currently online.</p>
+        </div>
+      </section>
+
+      <section class="screen admin-layout" id="admin-accounts" data-screen="admin-accounts">
+        <aside class="admin-sidebar"></aside>
+        <div class="admin-main">
+          <div class="page-head compact">
+            <p class="eyebrow">Account management</p>
+            <h2>Registered Accounts</h2>
+          </div>
+          <div class="toolbar">
+            <input class="search-input" id="accountSearch" type="search" placeholder="Search by name or email">
+            <select id="roleFilter"><option>All Roles</option><option>Customer</option><option>Admin</option></select>
+          </div>
+          <section class="table-panel">
+            <table id="accountsTable">
+              <thead><tr><th>ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Date Joined</th><th>Last Seen</th></tr></thead>
+              <tbody>
+                <tr data-role="Customer" data-search="avery cruz avery@example.com"><td>001</td><td><span class="avatar">AC</span>Avery Cruz</td><td>avery@example.com</td><td><span class="role customer">Customer</span></td><td>Apr 12, 2026</td><td>Now</td></tr>
+                <tr data-role="Admin" data-search="jordan reed jordan@vinyard.test"><td>002</td><td><span class="avatar">JR</span>Jordan Reed</td><td>jordan@vinyard.test</td><td><span class="role admin">Admin</span></td><td>Jan 20, 2026</td><td>Today</td></tr>
+                <tr data-role="Customer" data-search="nina park nina@example.com"><td>003</td><td><span class="avatar">NP</span>Nina Park</td><td>nina@example.com</td><td><span class="role customer">Customer</span></td><td>May 2, 2026</td><td>1 min ago</td></tr>
+                <tr data-role="Customer" data-search="marco lee marco@example.com"><td>004</td><td><span class="avatar">ML</span>Marco Lee</td><td>marco@example.com</td><td><span class="role customer">Customer</span></td><td>May 9, 2026</td><td>3 min ago</td></tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

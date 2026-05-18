@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vinyard Burger Bar | Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <main class="auth-screen">
+    <section class="hero-panel">
+      <div class="hero-text">
+        <p class="eyebrow">Premium ordering system</p>
+        <h1>Vinyard Burger Bar</h1>
+        <p>Order fresh. Eat bold.</p>
+      </div>
+    </section>
+    <section class="auth-panel-wrap">
+      <form class="auth-card panel" id="loginForm">
+        <a class="wordmark" href="/index.html">
+          <span class="wordmark-mark">V</span>
+          <span>Vinyard Burger Bar</span>
+        </a>
+        <div>
+          <p class="eyebrow">Welcome back</p>
+          <h2>Login</h2>
+        </div>
+        <label>Email
+          <input name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+        </label>
+        <label>Password
+          <input name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+        </label>
+        <button class="primary-btn" type="submit">Login</button>
+        <p class="message" id="loginMessage"></p>
+        <p class="form-link">New here? <a href="/register.html">Create an account</a></p>
+      </form>
+    </section>
+  </main>
+  <script src="/js/auth.js"></script>
+  <script>
+    const form = document.querySelector("#loginForm");
+    const message = document.querySelector("#loginMessage");
+    const params = new URLSearchParams(location.search);
+    if (params.get("registered")) VBB.showMessage(message, "Account created. You can log in now.");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const body = Object.fromEntries(new FormData(form));
+      try {
+        const data = await VBB.api("/api/auth/login", {
+          method: "POST",
+          body: JSON.stringify(body)
+        });
+        VBB.setSession(data.token, data.user);
+        location.href = data.user.role === "admin" ? "/admin/dashboard.html" : "/customer/dashboard.html";
+      } catch (error) {
+        VBB.showMessage(message, error.message, true);
+      }
+    });
+  </script>
+</body>
+</html>

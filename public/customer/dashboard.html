@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vinyard Burger Bar | Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/customer.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="wordmark" href="/customer/dashboard.html"><span class="wordmark-mark">V</span><span>Vinyard Burger Bar</span></a>
+    <nav class="nav-actions">
+      <a href="/customer/order-status.html">Orders</a>
+      <span>Hi, <span data-user-name></span></span>
+      <button class="icon-btn" type="button" data-cart-open aria-label="Open cart">Cart<span class="badge" id="cartCount">0</span></button>
+      <button class="link-button" type="button" data-logout>Logout</button>
+    </nav>
+  </header>
+  <main class="page">
+    <div class="page-head">
+      <p class="eyebrow">Today's menu</p>
+      <h2>Craft burgers, sides, and bold pairings</h2>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Menu categories">
+      <button class="tab is-active" type="button" data-category="burger">Burgers</button>
+      <button class="tab" type="button" data-category="sides">Sides</button>
+      <button class="tab" type="button" data-category="drinks">Drinks</button>
+      <button class="tab" type="button" data-category="combos">Combos</button>
+    </div>
+    <div class="menu-grid" id="menuGrid"></div>
+  </main>
+  <aside class="cart-sidebar" id="cartSidebar" aria-label="Shopping cart">
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button class="icon-btn" type="button" data-cart-close aria-label="Close cart">x</button>
+    </div>
+    <div id="cartItems" class="cart-items"></div>
+    <label>Order Notes
+      <textarea id="orderNotes" placeholder="Sauce on the side, extra napkins, allergies..."></textarea>
+    </label>
+    <div class="cart-total">
+      <span>Subtotal</span>
+      <strong id="cartSubtotal">$0.00</strong>
+    </div>
+    <button class="primary-btn" type="button" data-place-order>Place Order</button>
+    <p class="message" id="orderMessage"></p>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/socket.js"></script>
+  <script src="/js/customer.js"></script>
+</body>
+</html>
