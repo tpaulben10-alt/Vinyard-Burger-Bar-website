@@ -21,15 +21,24 @@
     </nav>
   </header>
   <main class="page">
+    <section class="brand-scene">
+      <div>
+        <p class="eyebrow">Vinyard Burger Bar</p>
+        <h2>Order from the same warm burger spot you know.</h2>
+        <p>Pure beef burgers, pasta, rice meals, fries, chicken, coffee, and drinks from the Vinyard menu.</p>
+      </div>
+    </section>
     <div class="page-head">
       <p class="eyebrow">Today's menu</p>
-      <h2>Craft burgers, sides, and bold pairings</h2>
+      <h2>Vinyard favorites, meals, pasta, coffee, and drinks</h2>
     </div>
     <div class="tabs" role="tablist" aria-label="Menu categories">
       <button class="tab is-active" type="button" data-category="burger">Burgers</button>
-      <button class="tab" type="button" data-category="sides">Sides</button>
+      <button class="tab" type="button" data-category="pasta">Pasta</button>
+      <button class="tab" type="button" data-category="fries">Fries & Appetizer</button>
+      <button class="tab" type="button" data-category="rice">Rice Meals</button>
+      <button class="tab" type="button" data-category="chicken">Fried Chicken</button>
       <button class="tab" type="button" data-category="drinks">Drinks</button>
-      <button class="tab" type="button" data-category="combos">Combos</button>
     </div>
     <div class="menu-grid" id="menuGrid"></div>
   </main>
@@ -44,7 +53,7 @@
     </label>
     <div class="cart-total">
       <span>Subtotal</span>
-      <strong id="cartSubtotal">$0.00</strong>
+      <strong id="cartSubtotal">₱0.00</strong>
     </div>
     <button class="primary-btn" type="button" data-place-order>Place Order</button>
     <p class="message" id="orderMessage"></p>

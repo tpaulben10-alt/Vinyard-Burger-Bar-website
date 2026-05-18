@@ -8,7 +8,7 @@ const ordersList = document.querySelector("#ordersList");
 const steps = ["pending", "confirmed", "preparing", "ready", "delivered"];
 
 function money(value) {
-  return `$${Number(value).toFixed(2)}`;
+  return `₱${Number(value).toFixed(2)}`;
 }
 
 function statusBadge(status) {

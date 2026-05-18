@@ -9,9 +9,11 @@ const state = {
 
 const categoryLabels = {
   burger: "Burgers",
-  sides: "Sides",
-  drinks: "Drinks",
-  combos: "Combos"
+  pasta: "Pasta",
+  fries: "Fries & Appetizer",
+  rice: "Rice Meals",
+  chicken: "Fried Chicken",
+  drinks: "Drinks"
 };
 
 const menuGrid = document.querySelector("#menuGrid");
@@ -27,7 +29,7 @@ document.querySelectorAll("[data-user-name]").forEach((node) => {
 });
 
 function money(value) {
-  return `$${Number(value).toFixed(2)}`;
+  return `₱${Number(value).toFixed(2)}`;
 }
 
 function renderMenu() {
@@ -42,8 +44,11 @@ function renderMenu() {
             <div class="menu-card-body">
               <h3>${item.name}</h3>
               <p>${item.description || ""}</p>
+              <span class="stock ${Number(item.stock) <= 0 ? "sold-out" : Number(item.stock) < 5 ? "low-stock" : ""}">
+                ${Number(item.stock) <= 0 ? "Sold Out" : `Stock: ${item.stock}${Number(item.stock) < 5 ? " - Low stock" : ""}`}
+              </span>
               <span class="price">${money(item.price)}</span>
-              <button class="primary-btn" type="button" data-add="${item.id}">Add to Cart</button>
+              <button class="primary-btn" type="button" data-add="${item.id}" ${Number(item.stock) <= 0 ? "disabled" : ""}>Add to Cart</button>
             </div>
           </article>`
         )
@@ -81,9 +86,13 @@ function renderCart() {
 
 function addToCart(id) {
   const item = state.menu.find((menuItem) => menuItem.id === Number(id));
-  if (!item) return;
+  if (!item || Number(item.stock) <= 0) return;
 
   const existing = state.cart.get(item.id) || { ...item, quantity: 0 };
+  if (existing.quantity >= Number(item.stock)) {
+    VBB.showMessage(orderMessage, `Only ${item.stock} ${item.name} available.`, true);
+    return;
+  }
   existing.quantity += 1;
   state.cart.set(item.id, existing);
   renderCart();
@@ -118,6 +127,7 @@ async function placeOrder() {
     });
     state.cart.clear();
     renderCart();
+    await loadMenu();
     VBB.showMessage(orderMessage, `Order #${data.order_id} placed. Track it live on the orders page.`);
   } catch (error) {
     VBB.showMessage(orderMessage, error.message, true);

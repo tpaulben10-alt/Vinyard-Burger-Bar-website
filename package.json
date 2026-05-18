@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node server/index.js",
     "dev": "node server/index.js",
-    "seed": "node server/seed.js"
+    "db:check": "node server/db-check.js",
+    "seed": "node server/seed.js",
+    "admin:create": "node server/create-admin.js"
   },
   "keywords": [
     "burger",

@@ -4,6 +4,11 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
+function publicOrderCode() {
+  const random = Math.random().toString(36).slice(2, 8).toUpperCase();
+  return `VBB-${Date.now().toString(36).toUpperCase()}-${random}`;
+}
+
 function normalizeOrderRows(rows) {
   const orders = new Map();
 
@@ -11,10 +16,10 @@ function normalizeOrderRows(rows) {
     if (!orders.has(row.id)) {
       orders.set(row.id, {
         id: row.id,
-        user_id: row.user_id,
+        user_id: row.user_id || row.customer_id,
         customer_name: row.customer_name,
-        total_amount: Number(row.total_amount),
-        status: row.status,
+        total_amount: Number(row.total_amount ?? row.total),
+        status: row.status === "completed" ? "delivered" : row.status,
         notes: row.notes,
         created_at: row.created_at,
         updated_at: row.updated_at,
@@ -47,7 +52,7 @@ router.post("/", authMiddleware, async (req, res, next) => {
     await connection.beginTransaction();
     const itemIds = items.map((item) => Number(item.menu_item_id));
     const [menuRows] = await connection.query(
-      `SELECT id, name, price FROM menu_items WHERE is_available = TRUE AND id IN (${itemIds.map(() => "?").join(",")})`,
+      `SELECT id, name, price, stock FROM menu_items WHERE is_available = TRUE AND id IN (${itemIds.map(() => "?").join(",")}) FOR UPDATE`,
       itemIds
     );
 
@@ -61,19 +66,34 @@ router.post("/", authMiddleware, async (req, res, next) => {
         throw Object.assign(new Error("Invalid menu item or quantity"), { status: 400 });
       }
 
+      if (Number(menuItem.stock) < quantity) {
+        throw Object.assign(new Error(`${menuItem.name} has only ${menuItem.stock} left in stock`), { status: 409 });
+      }
+
       total += Number(menuItem.price) * quantity;
-      return { menu_item_id: menuItem.id, quantity, unit_price: Number(menuItem.price) };
+      return { menu_item_id: menuItem.id, name: menuItem.name, quantity, unit_price: Number(menuItem.price) };
     });
 
+    for (const item of orderItems) {
+      await connection.execute("UPDATE menu_items SET stock = stock - ? WHERE id = ?", [
+        item.quantity,
+        item.menu_item_id
+      ]);
+    }
+
+    const [[user]] = await connection.execute("SELECT name FROM users WHERE id = ?", [req.user.id]);
+    const customerName = user?.name || req.user.name || "Customer";
     const [orderResult] = await connection.execute(
-      "INSERT INTO orders (user_id, total_amount, notes) VALUES (?, ?, ?)",
-      [req.user.id, total, notes || null]
+      `INSERT INTO orders
+       (public_order_code, customer_id, customer_name, customer_phone, customer_address, customer_notes, service_type, payment_method, status, total)
+       VALUES (?, ?, ?, ?, ?, ?, 'pickup', 'cash_on_pickup', 'pending', ?)`,
+      [publicOrderCode(), req.user.id, customerName, "N/A", "N/A", notes || null, total]
     );
 
     for (const item of orderItems) {
       await connection.execute(
-        "INSERT INTO order_items (order_id, menu_item_id, quantity, unit_price) VALUES (?, ?, ?, ?)",
-        [orderResult.insertId, item.menu_item_id, item.quantity, item.unit_price]
+        "INSERT INTO order_items (order_id, menu_item_id, item_name, unit_price, quantity, subtotal) VALUES (?, ?, ?, ?, ?, ?)",
+        [orderResult.insertId, item.menu_item_id, item.name, item.unit_price, item.quantity, item.unit_price * item.quantity]
       );
     }
 
@@ -96,10 +116,10 @@ router.get("/my", authMiddleware, async (req, res, next) => {
     const [rows] = await pool.execute(
       `SELECT o.*, u.name AS customer_name, oi.menu_item_id, oi.quantity, oi.unit_price, mi.name AS item_name
        FROM orders o
-       JOIN users u ON u.id = o.user_id
+       JOIN users u ON u.id = o.customer_id
        LEFT JOIN order_items oi ON oi.order_id = o.id
        LEFT JOIN menu_items mi ON mi.id = oi.menu_item_id
-       WHERE o.user_id = ?
+       WHERE o.customer_id = ?
        ORDER BY o.created_at DESC, o.id DESC`,
       [req.user.id]
     );

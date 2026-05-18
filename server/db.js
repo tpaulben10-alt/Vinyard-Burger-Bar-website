@@ -8,12 +8,16 @@ function buildSslConfig() {
     return undefined;
   }
 
-  if (process.env.DB_CA_CERT) {
-    const certPath = path.resolve(process.cwd(), process.env.DB_CA_CERT);
-    return { ca: fs.readFileSync(certPath, "utf8"), rejectUnauthorized: true };
+  const rejectUnauthorized = String(process.env.DB_SSL_REJECT_UNAUTHORIZED || "true").toLowerCase() !== "false";
+  const caSource = process.env.DB_CA_CERT || process.env.AIVEN_CA_CERT;
+
+  if (caSource) {
+    const maybePath = path.resolve(process.cwd(), caSource);
+    const ca = fs.existsSync(maybePath) ? fs.readFileSync(maybePath, "utf8") : caSource.replace(/\\n/g, "\n");
+    return { ca, rejectUnauthorized };
   }
 
-  return { rejectUnauthorized: true };
+  return { rejectUnauthorized };
 }
 
 const pool = mysql.createPool({

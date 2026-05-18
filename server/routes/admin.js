@@ -13,12 +13,12 @@ function normalizeOrderRows(rows) {
     if (!orders.has(row.id)) {
       orders.set(row.id, {
         id: row.id,
-        user_id: row.user_id,
+        user_id: row.user_id || row.customer_id,
         customer_name: row.customer_name,
         customer_email: row.customer_email,
-        total_amount: Number(row.total_amount),
-        status: row.status,
-        notes: row.notes,
+        total_amount: Number(row.total_amount ?? row.total),
+        status: row.status === "completed" ? "delivered" : row.status,
+        notes: row.notes || row.customer_notes,
         created_at: row.created_at,
         updated_at: row.updated_at,
         items: []
@@ -50,9 +50,11 @@ router.get("/orders", async (req, res, next) => {
     }
 
     const [rows] = await pool.execute(
-      `SELECT o.*, u.name AS customer_name, u.email AS customer_email, oi.menu_item_id, oi.quantity, oi.unit_price, mi.name AS item_name
+      `SELECT o.*, o.customer_id AS user_id, o.total AS total_amount, o.customer_notes AS notes,
+              u.name AS customer_name, u.email AS customer_email, oi.menu_item_id, oi.quantity, oi.unit_price,
+              COALESCE(mi.name, oi.item_name) AS item_name
        FROM orders o
-       JOIN users u ON u.id = o.user_id
+       LEFT JOIN users u ON u.id = o.customer_id
        LEFT JOIN order_items oi ON oi.order_id = o.id
        LEFT JOIN menu_items mi ON mi.id = oi.menu_item_id
        ${where}
@@ -75,7 +77,7 @@ router.patch("/orders/:id/status", async (req, res, next) => {
       return res.status(400).json({ message: "Invalid status" });
     }
 
-    const [existing] = await pool.execute("SELECT id, user_id FROM orders WHERE id = ?", [req.params.id]);
+    const [existing] = await pool.execute("SELECT id, customer_id AS user_id FROM orders WHERE id = ?", [req.params.id]);
     const order = existing[0];
     if (!order) {
       return res.status(404).json({ message: "Order not found" });

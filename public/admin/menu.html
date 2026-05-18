@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vinyard Burger Bar | Menu & Stock</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body data-admin-page="menu">
+  <header class="topbar">
+    <a class="wordmark" href="/admin/dashboard.html"><span class="wordmark-mark">V</span><span>Vinyard Burger Bar POS</span></a>
+    <nav class="nav-actions"><span><span data-user-name></span></span><button class="link-button" type="button" data-logout>Logout</button></nav>
+  </header>
+  <div class="admin-shell">
+    <aside class="admin-sidebar"><nav class="admin-nav" id="adminNav"></nav></aside>
+    <main class="admin-main">
+      <div class="page-head"><p class="eyebrow">Inventory control</p><h2>Menu & Stock</h2></div>
+      <form class="panel menu-form" id="menuForm">
+        <input name="name" placeholder="Item name" required>
+        <input name="category" placeholder="Category" required>
+        <input name="price" type="number" min="0" step="0.01" placeholder="Price" required>
+        <input name="stock" type="number" min="0" step="1" placeholder="Starting stock" required>
+        <input name="image_url" placeholder="Image URL or /img/menu/example.jpg">
+        <textarea name="description" placeholder="Description" required></textarea>
+        <button class="primary-btn" type="submit">Add Menu Item</button>
+      </form>
+      <section class="panel table-panel">
+        <table id="menuTable">
+          <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Description</th><th>Image</th><th>Actions</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/socket.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

@@ -25,7 +25,7 @@ app.set("io", io);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "..", "public")));
+app.use(express.static(path.join(__dirname, "..")));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/menu", menuRoutes);

@@ -10,7 +10,7 @@ const statusOptions = ["pending", "confirmed", "preparing", "ready", "delivered"
 const socket = VBBSocket.initSocket();
 
 function money(value) {
-  return `$${Number(value).toFixed(2)}`;
+  return `₱${Number(value).toFixed(2)}`;
 }
 
 function statusBadge(status) {
@@ -31,6 +31,7 @@ function renderAdminNav(active) {
   const links = [
     ["/admin/dashboard.html", "Dashboard", "dashboard"],
     ["/admin/orders.html", "Orders", "orders"],
+    ["/admin/menu.html", "Menu & Stock", "menu"],
     ["/admin/accounts.html", "Registered Accounts", "accounts"],
     ["/admin/online-users.html", "Online Customers", "online"]
   ];
@@ -199,3 +200,81 @@ if (page === "dashboard") loadDashboard().catch((error) => showToast(error.messa
 if (page === "orders") loadOrders().catch((error) => showToast(error.message));
 if (page === "accounts") loadAccounts().catch((error) => showToast(error.message));
 if (page === "online") loadOnlineUsers().catch((error) => showToast(error.message));
+
+async function loadMenuManager() {
+  const data = await VBB.api("/api/menu/admin/all");
+  const tbody = document.querySelector("#menuTable tbody");
+  if (!tbody) return;
+  tbody.innerHTML = data.items
+    .map(
+      (item) => `
+    <tr data-menu-id="${item.id}">
+      <td><input data-field="name" value="${item.name}"></td>
+      <td><input data-field="category" value="${item.category}"></td>
+      <td><input data-field="price" type="number" min="0" step="0.01" value="${Number(item.price)}"></td>
+      <td>
+        <span class="${Number(item.stock) < 5 ? "low-stock-text" : ""}">${Number(item.stock) < 5 ? "⚠️ " : ""}${item.stock}</span>
+        <div class="stock-actions">
+          <button class="mini-btn" type="button" data-stock-delta="-1">-</button>
+          <button class="mini-btn" type="button" data-stock-delta="1">+</button>
+        </div>
+      </td>
+      <td><textarea data-field="description">${item.description || ""}</textarea></td>
+      <td><input data-field="image_url" value="${item.image_url || ""}"></td>
+      <td>
+        <button class="mini-btn" type="button" data-save-menu>Save</button>
+        <button class="mini-btn danger" type="button" data-delete-menu>Delete</button>
+      </td>
+    </tr>`
+    )
+    .join("");
+}
+
+async function saveMenuRow(row) {
+  const id = row.dataset.menuId;
+  const payload = {};
+  row.querySelectorAll("[data-field]").forEach((field) => {
+    payload[field.dataset.field] = field.value;
+  });
+  payload.stock = row.querySelector("td:nth-child(4) span").textContent.replace("⚠️", "").trim();
+  await VBB.api(`/api/menu/${id}`, { method: "PUT", body: JSON.stringify(payload) });
+  await loadMenuManager();
+  showToast("Menu item saved.");
+}
+
+async function addMenuItem(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const payload = Object.fromEntries(new FormData(form));
+  await VBB.api("/api/menu", { method: "POST", body: JSON.stringify(payload) });
+  form.reset();
+  await loadMenuManager();
+  showToast("Menu item added.");
+}
+
+document.addEventListener("click", (event) => {
+  const row = event.target.closest("[data-menu-id]");
+  if (event.target.matches("[data-save-menu]")) {
+    saveMenuRow(row).catch((error) => showToast(error.message));
+  }
+  if (event.target.matches("[data-delete-menu]")) {
+    VBB.api(`/api/menu/${row.dataset.menuId}`, { method: "DELETE" })
+      .then(loadMenuManager)
+      .then(() => showToast("Menu item removed."))
+      .catch((error) => showToast(error.message));
+  }
+  if (event.target.matches("[data-stock-delta]")) {
+    VBB.api(`/api/menu/${row.dataset.menuId}/stock`, {
+      method: "PATCH",
+      body: JSON.stringify({ delta: Number(event.target.dataset.stockDelta) })
+    })
+      .then(loadMenuManager)
+      .catch((error) => showToast(error.message));
+  }
+});
+
+document.querySelector("#menuForm")?.addEventListener("submit", (event) => {
+  addMenuItem(event).catch((error) => showToast(error.message));
+});
+
+if (page === "menu") loadMenuManager().catch((error) => showToast(error.message));
