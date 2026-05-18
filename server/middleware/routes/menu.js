@@ -1,7 +1,7 @@
 const express = require("express");
-const pool = require("../db");
-const authMiddleware = require("../middleware/authMiddleware");
-const requireAdmin = require("../middleware/roleMiddleware");
+const pool = require("../../db");
+const authMiddleware = require("../authMiddleware");
+const requireAdmin = require("../roleMiddleware");
 
 const router = express.Router();
 

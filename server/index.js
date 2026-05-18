@@ -5,11 +5,11 @@ const http = require("http");
 const { Server } = require("socket.io");
 require("dotenv").config();
 
-const authRoutes = require("./routes/auth");
-const menuRoutes = require("./routes/menu");
-const orderRoutes = require("./routes/orders");
-const adminRoutes = require("./routes/admin");
-const userRoutes = require("./routes/users");
+const authRoutes = require("./middleware/routes/auth");
+const menuRoutes = require("./middleware/routes/menu");
+const orderRoutes = require("./middleware/routes/orders");
+const adminRoutes = require("./middleware/routes/admin");
+const userRoutes = require("./middleware/routes/users");
 const registerSocketHandlers = require("./socket/socketHandler");
 
 const app = express();
